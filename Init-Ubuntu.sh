@@ -10,6 +10,8 @@ source ./Draw-ProgressBar.sh
 
 toinstall=(
     Update
+    Upgrade
+    Auto
     Get-dwm
     Get-Rust
     Get-go
@@ -25,25 +27,27 @@ function Is-Parameter {
         false
     fi
 }
-Update () {
-    apt update
-    apt upgrade -y
-
+Update () { apt -qq -q update ; }
+Upgrade () { apt -qq -q upgrade -y ; }
+Auto () { 
+    apt -qq -q autoremove 
+    apt -qq -q autoclean 
 }
 Get-dwm () {
-    mkdir ~/srcs
-    cd ~/srcs
-    git clone git://git.suckless.org/dwm
+    mkdir ~/srcs > /dev/null
+    cd ~/srcs > /dev/null
+    git clone git://git.suckless.org/dwm > /dev/null
+    clear
     
 }
 Get-go () {
-    snap install go 
+    snap install go > /dev/null
 }
 Get-Rust () {
-    apt install cargo -y
+    apt -qq -q install cargo -y
 }
 Get-Code () {
-    snap install code --classic
+    snap install code --classic > /dev/null
 }
 
 function Install {
