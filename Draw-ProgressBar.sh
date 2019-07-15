@@ -3,7 +3,6 @@
 function Get-ProgressBar {
 # drawing progressbar while doing other functions
 	argcnt=${#@}
-	echo "$argcnt"
 	#finding max length of parameter
 	max=0
 	for arg in $@
@@ -27,10 +26,10 @@ function Get-ProgressBar {
 		cols=$(tput cols)
 		
 
-
-		Draw-ProgressBar $cols $max 
-
-		Draw-Percentage $cnt $argcnt
+		
+		pc=$[$cnt*100/($argcnt+1)]
+		Draw-ProgressBar $cols $max $pc
+		Draw-Percentage $pc
 
 		##do some work
 		#$arg
@@ -56,12 +55,17 @@ function Draw-Name {
 function Draw-ProgressBar {
 	cols=$1
 	name=$2+2
-	
-	barlen=$(( $cols - $name - 6 - 4))
+	fill=$3
+	barlen=$(( $cols - $name - 10))
+	barfilllen=$[$barlen*fill/100]
+	barlen=$[$barlen-$barfilllen]
+	for i in $(seq 1 $barfilllen)
+	do
+		echo -ne "#"
+	done
 	for i in $(seq 1 $barlen)
 	do
-		i=$(( $i % 10))
-		echo -ne "$i"
+		echo -ne "-"
 	done
 }
 
@@ -72,7 +76,7 @@ function Draw-Bar {
 	max=$4
 	pc=$5
 	Draw-Name $name $len
-	Draw-ProgressBar $cols $max
+	Draw-ProgressBar $cols $max $pc
 	Draw-Percentage $pc
 	echo ""
 }
@@ -83,10 +87,10 @@ function Draw-Percentage {
 	len=${#pc}
 	echo -ne "["
 	if [ $len -eq 1 ]; then 
-		echo -ne "--" 
+		Draw-Space 2
 	fi
 	if [ $len -eq 2 ]; then
-		echo -ne "-" 
+		Draw-Space 1 
 	fi
 	echo -ne "$pc"
 	echo -ne "%"
