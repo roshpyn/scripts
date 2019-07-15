@@ -24,18 +24,13 @@ function Get-ProgressBar {
 		Draw-Name $arg $(( $max - ${#arg} )) 
 		## 
 		cols=$(tput cols)
-		
-
-		
 		pc=$[$cnt*100/($argcnt+1)]
 		Draw-ProgressBar $cols $max $pc
 		Draw-Percentage $pc
-
+		echo ""
 		##do some work
-		#$arg
+		$arg
 		cnt=$(($cnt+1)) 
-		#echo -ne "\r"
-		echo -ne ""
 	done
 	Draw-Bar "END" $(($max - 3)) $cols $max 100
 } 
@@ -104,4 +99,4 @@ function Draw-Space {
 		done
 }
 
-Get-ProgressBar $@
+#Get-ProgressBar $@
