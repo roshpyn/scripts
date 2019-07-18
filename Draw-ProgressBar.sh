@@ -17,7 +17,6 @@ function Get-ProgressBar {
 	cols=$(tput cols)
 	clear
 	Draw-Bar "START" $(($max - 5)) $cols $max 0
-	echo -ne '\r'
 	#actual drawing
 	cnt=1
 	for arg in $@
@@ -29,13 +28,11 @@ function Get-ProgressBar {
 		pc=$[$cnt*100/($argcnt+1)]
 		Draw-ProgressBar $cols $max $pc
 		Draw-Percentage $pc
-		echo -ne "\r"
 		##do some work
 		$arg
 		cnt=$(($cnt+1)) 
 	done
 	Draw-Bar "END" $(($max - 3)) $cols $max 100
-	echo ""
 } 
 
 function Draw-Name {
@@ -92,6 +89,7 @@ function Draw-Percentage {
 	echo -ne "$pc"
 	echo -ne "%"
 	echo -ne "]"
+	echo ""
 }
 
 function Draw-Space {
